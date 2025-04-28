@@ -3,8 +3,7 @@ CC ?= $(shell which clang)
 
 C_SRC = $(wildcard src/*.c)
 HEADERS = $(wildcard include/*.h)
-OBJ = $(patsubst src/%.c, obj/%.o)
-OBJ_GRAPHICS = $(patsubst src/%.c, obj/%.o)
+OBJ = $(patsubst src/%.c, obj/%.o, $(C_SRC))
 
 CFLAGS = -std=c11 -Wall -pedantic -Iinclude
 
