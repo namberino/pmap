@@ -1,5 +1,5 @@
-#ifndef TCP_H
-#define TCP_H
+#ifndef SCAN_H
+#define SCAN_H
 
 #include <arpa/inet.h>
 #include <sys/socket.h>

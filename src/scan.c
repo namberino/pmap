@@ -1,4 +1,4 @@
-#include "tcp.h"
+#include "scan.h"
 
 int tcp_scan(char* host_str, int port_num)
 {

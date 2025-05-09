@@ -6,7 +6,7 @@
 #include <arpa/inet.h>
 #include <sys/socket.h>
 
-#include "tcp.h"
+#include "scan.h"
 
 int main(int argc, char* argv[])
 {
