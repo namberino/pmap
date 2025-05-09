@@ -1,3 +1,13 @@
-# Pmap
+# Pmap - A Network Port Mapper
 
-Pmap - The port mapper
+Pmap is an Nmap clone. It can be used for network port discovery.
+
+## Milestones
+
+- [x] Full TCP scan
+- [x] Vanilla scan (Port discovery)
+- [ ] Parallel port scan
+- [ ] Connection timeout
+- [ ] Sweep scan (Host discovery)
+- [ ] SYN scan
+- [ ] Service detection
