@@ -1,7 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include <getopt.h>
 #include <ctype.h>
+#include <arpa/inet.h>
+#include <sys/socket.h>
+
+#include "tcp.h"
 
 int main(int argc, char* argv[])
 {
@@ -55,7 +60,14 @@ int main(int argc, char* argv[])
         }
     }
 
-    printf ("host = %s, port = %s\n", host_str, port_str);
+    char* endptr;
+    int port_num = strtol(port_str, &endptr, 10);
+
+    printf("Scanning %s:%d\n", host_str, port_num);
+    if (tcp_scan(host_str, port_num) != 0)
+        printf("Port is closed\n");
+    else
+        printf("Port is open\n");
 
     return 0;
 }
