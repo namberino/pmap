@@ -12,17 +12,19 @@ int main(int argc, char* argv[])
 {
     char* host_str = NULL;
     char* port_str = NULL;
+    char* nthread_str = NULL;
     int opt;
     opterr = 0;
 
     int option_index = 0;
     static struct option long_options[] = {
-        {"host",    required_argument, NULL,  'i'},
-        {"port",    required_argument, NULL,  'p'},
-        {NULL,      0,                 NULL,   0 }
+        {"host", required_argument, NULL, 'i'},
+        {"port", required_argument, NULL, 'p'},
+        {"nthreads", required_argument, NULL, 't'},
+        {NULL, 0, NULL,  0 }
     };
 
-    while ((opt = getopt_long(argc, argv, "-:i:p:", long_options, &option_index)) != -1)
+    while ((opt = getopt_long(argc, argv, "-:i:p:nt:", long_options, &option_index)) != -1)
     {
         switch (opt)
         {
@@ -42,6 +44,10 @@ int main(int argc, char* argv[])
 
             case 'p':
                 port_str = optarg;
+                break;
+
+            case 't':
+                nthread_str = optarg;
                 break;
 
             case ':':
@@ -73,9 +79,24 @@ int main(int argc, char* argv[])
     }
     else
     {
-        lnode* head = vanilla_scan(host_str);
-        lnode* curr_node = head;
+        // lnode* head = vanilla_scan(host_str);
 
+        // lnode* curr_node = head;
+        // while (curr_node != NULL)
+        // {
+        //     printf("Open port: %d\n", curr_node->num);
+        //     curr_node = curr_node->next;
+        // }
+
+        // free_ll(head);
+
+        pthread_mutex_init(&list_lock, NULL);
+
+        char* endptr;
+        int n_threads = strtol(nthread_str, &endptr, 10);
+        lnode* head = threaded_scan(host_str, n_threads);
+
+        lnode* curr_node = head;
         while (curr_node != NULL)
         {
             printf("Open port: %d\n", curr_node->num);

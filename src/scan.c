@@ -63,3 +63,59 @@ lnode* vanilla_scan(char* host_str)
 
     return head;
 }
+
+void threaded_append_port(int port)
+{
+    lnode* valid_port = malloc(sizeof(lnode));
+    valid_port->num = port;
+    valid_port->next = NULL;
+
+    pthread_mutex_lock(&list_lock);
+    if (!head)
+    {
+        head = valid_port;
+        tail = valid_port;
+    }
+    else
+    {
+        tail->next = valid_port;
+        tail = valid_port;
+    }
+    pthread_mutex_unlock(&list_lock);
+}
+
+void* scan_thread(void* args)
+{
+    scan_args* a = args;
+
+    for (int i = a->start_port; i <= a->end_port; i++)
+    {
+        if (tcp_scan(a->host, i) == 0)
+            threaded_append_port(i);
+    }
+    
+    return NULL;
+}
+
+lnode* threaded_scan(char* host_str, int n_threads)
+{
+    pthread_t threads[n_threads];
+    scan_args args[n_threads];
+
+    // start threads with args
+    int ports_per_thread = 65535 / n_threads;
+    for (int i = 0; i < n_threads; i++)
+    {
+        args[i].host = host_str;
+        args[i].start_port = i * ports_per_thread + 1;
+        args[i].end_port = (i == n_threads - 1) ? 65535 : (i + 1) * ports_per_thread;
+
+        pthread_create(&threads[i], NULL, scan_thread, &args[i]);
+    }
+
+    // wait for all threads to finish
+    for (int i = 0; i < n_threads; i++)
+        pthread_join(threads[i], NULL);
+
+    return head;
+}
