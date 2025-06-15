@@ -5,12 +5,19 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-typedef struct Node
+typedef struct pNode
 {
     int num;
-    struct Node* next;
-} lnode;
+    struct pNode* next;
+} pnode;
 
-void free_ll(lnode* head);
+typedef struct hNode
+{
+    char* host_str;
+    struct hNode* next;
+} hnode;
+
+
+void free_ll(pnode* head);
 
 #endif

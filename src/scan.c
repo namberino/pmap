@@ -117,10 +117,10 @@ int tcp_scan_timeout(char* host_str, int port_num, int timeout_ms)
     return 0;
 }
 
-lnode* vanilla_scan(char* host_str)
+pnode* vanilla_scan(char* host_str)
 {
-    lnode* head = NULL;
-    lnode* tail = NULL;
+    pnode* head = NULL;
+    pnode* tail = NULL;
     
     // scan every port on specified host (port 0 is reserved)
     for (int port = 1; port <= 65535; port++)
@@ -129,7 +129,7 @@ lnode* vanilla_scan(char* host_str)
     
         if (scan_status == 0)
         {
-            lnode* valid_port = malloc(sizeof(lnode));
+            pnode* valid_port = malloc(sizeof(pnode));
             valid_port->num = port;
             valid_port->next = NULL;
 
@@ -150,7 +150,7 @@ lnode* vanilla_scan(char* host_str)
 
 void threaded_append_port(int port)
 {
-    lnode* valid_port = malloc(sizeof(lnode));
+    pnode* valid_port = malloc(sizeof(pnode));
     valid_port->num = port;
     valid_port->next = NULL;
 
@@ -181,7 +181,7 @@ void* scan_thread(void* args)
     return NULL;
 }
 
-lnode* threaded_scan(char* host_str, int n_threads, int timeout_ms)
+pnode* threaded_scan(char* host_str, int n_threads, int timeout_ms)
 {
     pthread_t threads[n_threads];
     scan_args args[n_threads];

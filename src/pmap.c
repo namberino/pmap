@@ -91,9 +91,9 @@ int main(int argc, char* argv[])
     }
     else
     {
-        // lnode* head = vanilla_scan(host_str);
+        // pnode* head = vanilla_scan(host_str);
 
-        // lnode* curr_node = head;
+        // pnode* curr_node = head;
         // while (curr_node != NULL)
         // {
         //     printf("Open port: %d\n", curr_node->num);
@@ -105,10 +105,10 @@ int main(int argc, char* argv[])
         pthread_mutex_init(&list_lock, NULL);
 
         printf("Starting scan...\nHost: %s | Threads: %d | Timeout: %dms\n", host_str, n_threads, timeout_ms);
-        lnode* head = threaded_scan(host_str, n_threads, timeout_ms);
+        pnode* head = threaded_scan(host_str, n_threads, timeout_ms);
 
-        printf("Successfully scanned %s\nOpen ports:\n", host_str);
-        lnode* curr_node = head;
+        printf("\nSuccessfully scanned %s\nOpen ports:\n", host_str);
+        pnode* curr_node = head;
         while (curr_node != NULL)
         {
             printf("%d\n", curr_node->num);

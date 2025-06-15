@@ -1,9 +1,9 @@
 #include "ll.h"
 
-void free_ll(lnode* head)
+void free_ll(pnode* head)
 {
-    lnode* curr_node = head;
-    lnode* temp;
+    pnode* curr_node = head;
+    pnode* temp;
 
     // printf("Freeing linked list...\n");
     while (curr_node != NULL)
