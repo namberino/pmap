@@ -7,7 +7,7 @@ Pmap is an Nmap clone. It can be used for network port discovery.
 - [x] Full TCP scan
 - [x] Vanilla scan (Port discovery)
 - [x] Parallel port scan
-- [ ] Connection timeout
+- [x] Connection timeout
 - [ ] Sweep scan (Host discovery)
 - [ ] SYN scan
 - [ ] Service detection
