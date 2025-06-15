@@ -13,6 +13,9 @@ int main(int argc, char* argv[])
     char* host_str = NULL;
     char* port_str = NULL;
     char* nthread_str = NULL;
+    char* timeout_str = NULL;
+    int timeout_ms = 100;
+    int n_threads = 100;
     int opt;
     opterr = 0;
 
@@ -20,11 +23,12 @@ int main(int argc, char* argv[])
     static struct option long_options[] = {
         {"host", required_argument, NULL, 'i'},
         {"port", required_argument, NULL, 'p'},
-        {"nthreads", required_argument, NULL, 't'},
+        {"nthreads", required_argument, NULL, 'n'},
+        {"timeout", required_argument, NULL, 't'},
         {NULL, 0, NULL,  0 }
     };
 
-    while ((opt = getopt_long(argc, argv, "-:i:p:nt:", long_options, &option_index)) != -1)
+    while ((opt = getopt_long(argc, argv, "-:i:p:n:t:", long_options, &option_index)) != -1)
     {
         switch (opt)
         {
@@ -46,8 +50,12 @@ int main(int argc, char* argv[])
                 port_str = optarg;
                 break;
 
-            case 't':
+            case 'n':
                 nthread_str = optarg;
+                break;
+
+            case 't':
+                timeout_str = optarg;
                 break;
 
             case ':':
@@ -93,8 +101,10 @@ int main(int argc, char* argv[])
         pthread_mutex_init(&list_lock, NULL);
 
         char* endptr;
-        int n_threads = strtol(nthread_str, &endptr, 10);
-        lnode* head = threaded_scan(host_str, n_threads);
+        if (nthread_str != NULL) n_threads = strtol(nthread_str, &endptr, 10);
+        if (timeout_str != NULL) timeout_ms = strtol(timeout_str, &endptr, 10);
+
+        lnode* head = threaded_scan(host_str, n_threads, timeout_ms);
 
         lnode* curr_node = head;
         while (curr_node != NULL)
