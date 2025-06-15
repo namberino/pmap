@@ -74,13 +74,17 @@ int main(int argc, char* argv[])
         }
     }
 
+    char* endptr;
+    if (nthread_str != NULL) n_threads = strtol(nthread_str, &endptr, 10);
+    if (timeout_str != NULL) timeout_ms = strtol(timeout_str, &endptr, 10);
+
     if (port_str != NULL)
     {
         char* endptr;
         int port_num = strtol(port_str, &endptr, 10);
 
         printf("Scanning %s:%d\n", host_str, port_num);
-        if (tcp_scan(host_str, port_num) != 0)
+        if (tcp_scan_timeout(host_str, port_num, timeout_ms) != 0)
             printf("Port is closed\n");
         else
             printf("Port is open\n");
@@ -100,16 +104,14 @@ int main(int argc, char* argv[])
 
         pthread_mutex_init(&list_lock, NULL);
 
-        char* endptr;
-        if (nthread_str != NULL) n_threads = strtol(nthread_str, &endptr, 10);
-        if (timeout_str != NULL) timeout_ms = strtol(timeout_str, &endptr, 10);
-
+        printf("Starting scan...\nHost: %s | Threads: %d | Timeout: %dms\n", host_str, n_threads, timeout_ms);
         lnode* head = threaded_scan(host_str, n_threads, timeout_ms);
 
+        printf("Successfully scanned %s\nOpen ports:\n", host_str);
         lnode* curr_node = head;
         while (curr_node != NULL)
         {
-            printf("Open port: %d\n", curr_node->num);
+            printf("%d\n", curr_node->num);
             curr_node = curr_node->next;
         }
 
